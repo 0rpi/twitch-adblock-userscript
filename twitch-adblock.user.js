@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Twitch Adblock Userscript
 // @namespace    https://github.com/0rpi/twitch-adblock-userscript
-// @version      37.2.2
-// @description  Blocks Twitch ads (fork of vaft from pixeltris/TwitchAdSolutions) with a 360p/Source ad fallback toggle and auto 1440p60/1080p60 quality
+// @version      37.3.0
+// @description  Blocks Twitch ads (fork of vaft from pixeltris/TwitchAdSolutions) with a 360p/Source ad fallback toggle and auto 1440p60/1080p60 quality (toggleable)
 // @author       0rpi, pixeltris/TwitchAdSolutions contributors, VideoAdBlockForTwitch contributors (https://github.com/cleanlock/VideoAdBlockForTwitch#credits)
 // @license      MIT
 // @homepageURL  https://github.com/0rpi/twitch-adblock-userscript
@@ -16,6 +16,10 @@
 // ==/UserScript==
 (function() {
     'use strict';
+    // Versioning note: @version above (37.x) is the public release number used by
+    // Violentmonkey/Tampermonkey for auto-update. Bump it on every user-visible change.
+    // ourTwitchAdSolutionsVersion below is an INTERNAL anti-conflict guard (upstream vaft
+    // compat): only bump it if the conflict protocol with other vaft copies changes.
     const ourTwitchAdSolutionsVersion = 24;// Used to prevent conflicts with outdated versions of the scripts
     if (typeof window.twitchAdSolutionsVersion !== 'undefined' && window.twitchAdSolutionsVersion >= ourTwitchAdSolutionsVersion) {
         console.log("skipping vaft as there's another script active. ourVersion:" + ourTwitchAdSolutionsVersion + " activeVersion:" + window.twitchAdSolutionsVersion);
@@ -145,6 +149,7 @@
                     ${getWasmWorkerJs.toString()}
                     ${getServerTimeFromM3u8.toString()}
                     ${replaceServerTimeInM3u8.toString()}
+                    ${getFirstM3u8Url.toString()}
                     const workerString = getWasmWorkerJs('${twitchBlobUrl.replaceAll("'", "%27")}');
                     declareOptions(self);
                     BackupPlayerTypes = ${JSON.stringify(BackupPlayerTypes)};
@@ -289,8 +294,11 @@
                                 const encodingsM3u8 = await response.text();
                                 const serverTime = getServerTimeFromM3u8(encodingsM3u8);
                                 let streamInfo = StreamInfos[channelName];
-                                if (streamInfo != null && streamInfo.EncodingsM3U8 != null && (await realFetch(streamInfo.EncodingsM3U8.match(/^https:.*\.m3u8$/m)[0])).status !== 200) {
-                                    streamInfo = null;
+                                if (streamInfo != null && streamInfo.EncodingsM3U8 != null) {
+                                    const prevM3u8Url = getFirstM3u8Url(streamInfo.EncodingsM3U8);
+                                    if (!prevM3u8Url || (await realFetch(prevM3u8Url)).status !== 200) {
+                                        streamInfo = null;
+                                    }
                                 }
                                 if (streamInfo == null || streamInfo.EncodingsM3U8 == null) {
                                     StreamInfos[channelName] = streamInfo = {
@@ -386,6 +394,13 @@
             return newServerTime ? encodingsM3u8.replace(/(#EXT-X-SESSION-DATA:DATA-ID="SERVER-TIME",VALUE=")[^"]+(")/, `$1${newServerTime}$2`) : encodingsM3u8;
         }
         return newServerTime ? encodingsM3u8.replace(new RegExp('(SERVER-TIME=")[0-9.]+"'), `SERVER-TIME="${newServerTime}"`) : encodingsM3u8;
+    }
+    function getFirstM3u8Url(encodingsM3u8) {
+        if (typeof encodingsM3u8 !== 'string') {
+            return null;
+        }
+        const m = encodingsM3u8.match(/^https:.*\.m3u8$/m);
+        return m ? m[0] : null;
     }
     function stripAdSegments(textStr, stripAllSegments, streamInfo) {
         let hasStrippedAdSegments = false;
@@ -1128,6 +1143,21 @@
         } catch {}
         postTwitchWorkerMessage('UpdateBackupPlayerTypes', BackupPlayerTypes);
     };
+    // Auto-quality preference: 'on' (default) or 'off'. Stored separately so
+    // disabling it never changes the ad fallback mode above.
+    function getAutoQualityMode() {
+        try {
+            return localStorage.getItem('vaftAutoQuality') === 'off' ? 'off' : 'on';
+        } catch {
+            return 'on';
+        }
+    }
+    window.getAutoQuality = getAutoQualityMode;
+    window.setAutoQuality = (mode) => {
+        try {
+            localStorage.setItem('vaftAutoQuality', mode === 'off' ? 'off' : 'on');
+        } catch {}
+    };
     window.addEventListener('storage', (e) => {
         if (e.key === 'adBackupMode') {
             applyAdBackupMode(e.newValue);
@@ -1138,13 +1168,21 @@
 
 (() => {
   if (window.self !== window.top || typeof window.setAdBackupMode !== 'function') return;
-  document.addEventListener('DOMContentLoaded', () => document.head.insertAdjacentHTML('beforeend', '<style>.player-adblock-notice,[data-a-target="video-ad-label"],div:has(> [data-a-target="video-ad-label"]),[data-a-target="video-ad-countdown"],[data-test-selector="ad-banner-default-text"]{display:none!important}#vaft-ad-mode{display:inline-flex;align-items:center;gap:2px;margin-right:8px;font-size:12px;font-weight:600}#vaft-ad-mode span{margin-right:4px;color:var(--color-text-alt-2,#adadb8)}#vaft-ad-mode button{padding:3px 8px;border:0;border-radius:4px;cursor:pointer;background:var(--color-background-button-secondary-default,#2f2f35);color:var(--color-text-button-secondary,#efeff1)}#vaft-ad-mode button[aria-pressed="true"]{background:var(--color-background-button-primary-default,#9147ff);color:var(--color-text-button-primary,#fff)}</style>'));
+  document.addEventListener('DOMContentLoaded', () => document.head.insertAdjacentHTML('beforeend', '<style>.player-adblock-notice,[data-a-target="video-ad-label"],div:has(> [data-a-target="video-ad-label"]),[data-a-target="video-ad-countdown"],[data-test-selector="ad-banner-default-text"]{display:none!important}#vaft-ad-mode{display:inline-flex;align-items:center;gap:2px;margin-right:8px;font-size:12px;font-weight:600}#vaft-ad-mode span{margin-right:4px;color:var(--color-text-alt-2,#adadb8)}#vaft-ad-mode button{padding:3px 8px;border:0;border-radius:4px;cursor:pointer;background:var(--color-background-button-secondary-default,#2f2f35);color:var(--color-text-button-secondary,#efeff1)}#vaft-ad-mode button[aria-pressed="true"]{background:var(--color-background-button-primary-default,#9147ff);color:var(--color-text-button-primary,#fff)}#vaft-ad-mode .vaft-sep{margin:0 6px;opacity:.5}</style>'));
   const PREF = ['1440p60', '1080p60', '1440p', '1080p'];
   let lastUrl = '';
   let done = false;
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const q = s => document.querySelector(s);
+  const isAutoQualityOn = () => {
+    try {
+      if (typeof window.getAutoQuality === 'function') return window.getAutoQuality() !== 'off';
+      return localStorage.getItem('vaftAutoQuality') !== 'off';
+    } catch {
+      return true;
+    }
+  };
 
   async function setQuality() {
     const settings = q('[data-a-target="player-settings-button"]');
@@ -1164,38 +1202,62 @@
     return !!pick;
   }
 
-  function renderAdMode(box) {
-    const mode = window.BackupPlayerTypes.includes('autoplay') ? '360p' : 'source';
-    box.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === mode));
+  function renderModes(box) {
+    const adMode = window.BackupPlayerTypes?.includes('autoplay') ? '360p' : 'source';
+    const qMode = isAutoQualityOn() ? 'on' : 'off';
+    box.querySelectorAll('button[data-kind="ad"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === adMode)));
+    box.querySelectorAll('button[data-kind="quality"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === qMode)));
   }
 
   function ensureAdModeButtons() {
+    if (document.hidden) return;
     const share = q('[data-a-target="share-button"]');
     if (!share || typeof window.setAdBackupMode !== 'function') return;
     const existing = q('#vaft-ad-mode');
-    if (existing) { renderAdMode(existing); return; }
+    if (existing) { renderModes(existing); return; }
     const box = document.createElement('div');
     box.id = 'vaft-ad-mode';
     const fr = navigator.language.startsWith('fr');
     box.innerHTML = `<span>${fr ? 'Pub' : 'Ad'}</span>`
-      + `<button type="button" data-mode="360p" title="${fr ? 'Si les flux Source ont la pub : passage au flux 360p' : 'If both Source streams carry the ad: switch to the 360p stream'}">360p</button>`
-      + `<button type="button" data-mode="source" title="${fr ? 'Toujours en Source : si les flux Source ont la pub, image figée pendant la pub' : 'Always Source: if both Source streams carry the ad, the picture freezes during the ad'}">Source</button>`;
+      + `<button type="button" data-kind="ad" data-mode="360p" title="${fr ? 'Si les flux Source ont la pub : passage au flux 360p' : 'If both Source streams carry the ad: switch to the 360p stream'}">360p</button>`
+      + `<button type="button" data-kind="ad" data-mode="source" title="${fr ? 'Toujours en Source : si les flux Source ont la pub, image figée pendant la pub' : 'Always Source: if both Source streams carry the ad, the picture freezes during the ad'}">Source</button>`
+      + `<span class="vaft-sep">|</span><span>${fr ? 'Qualité' : 'Quality'}</span>`
+      + `<button type="button" data-kind="quality" data-mode="on" title="${fr ? 'Qualité auto 1080p60 activée' : 'Auto 1080p60 quality on'}">Auto</button>`
+      + `<button type="button" data-kind="quality" data-mode="off" title="${fr ? 'Qualité auto désactivée : ne touche pas à ton réglage' : 'Auto quality off: leaves your setting alone'}">Off</button>`;
     box.addEventListener('click', e => {
-      const mode = e.target.closest('button')?.dataset.mode;
-      if (!mode) return;
-      window.setAdBackupMode?.(mode);
-      renderAdMode(box);
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      if (btn.dataset.kind === 'ad') {
+        window.setAdBackupMode?.(btn.dataset.mode);
+      } else if (btn.dataset.kind === 'quality') {
+        if (typeof window.setAutoQuality === 'function') window.setAutoQuality(btn.dataset.mode);
+        else try { localStorage.setItem('vaftAutoQuality', btn.dataset.mode === 'off' ? 'off' : 'on'); } catch {}
+        if (btn.dataset.mode === 'on') done = false;
+      }
+      renderModes(box);
     });
     share.before(box);
-    renderAdMode(box);
+    renderModes(box);
   }
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'vaftAutoQuality' || e.key === 'adBackupMode') {
+      const box = q('#vaft-ad-mode');
+      if (box) renderModes(box);
+      if (e.key === 'vaftAutoQuality' && e.newValue !== 'off') done = false;
+    }
+  });
 
   setInterval(ensureAdModeButtons, 1000);
 
-  try { localStorage.setItem('video-quality', JSON.stringify({ default: 'chunked' })); } catch {}
+  try {
+    if (isAutoQualityOn()) localStorage.setItem('video-quality', JSON.stringify({ default: 'chunked' }));
+  } catch {}
 
   let busy = false;
   setInterval(async () => {
+    if (document.hidden) return;
+    if (!isAutoQualityOn()) return;
     const v = q('video');
     if (busy || !v) return;
     if (location.href !== lastUrl) { lastUrl = location.href; done = false; }
