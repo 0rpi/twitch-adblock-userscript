@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest an improvement or a change to port from upstream vaft / a fork.
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The script stays small and conservative: new features should be opt-in and never break ad blocking or playback.
+        🇫🇷 Tu peux écrire en français.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: "What is missing or annoying today? FR : le problème ou le besoin."
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: "What should the script do? Link the upstream / fork commit if it is a port. FR : la proposition."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

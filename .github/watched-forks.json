@@ -1,0 +1,33 @@
+{
+  "$comment": "Read by .github/scripts/fork-watch.js (workflow fork-watch.yml). Lists repos whose recent commits to vaft/userscript files are worth porting. 'paths' are passed to the GitHub commits API (file or directory). 'forksOf' discovers forks via the API and only checks forks pushed inside the window. 'self' = the repo running the workflow.",
+  "windowDays": 8,
+  "label": "upstream-watch",
+  "issueTitle": "Upstream / fork activity on vaft",
+  "defaultPaths": ["vaft", "twitch-adblock.user.js"],
+  "maxReposPerRun": 60,
+  "repos": [
+    {
+      "repo": "pixeltris/TwitchAdSolutions",
+      "paths": ["vaft"],
+      "note": "upstream vaft (archived 2026-03-05)"
+    },
+    {
+      "repo": "Wibias/twitch-adblock-userscript",
+      "paths": ["twitch-adblock.user.js"],
+      "note": "fork the 38.0.0 hardening was ported from"
+    }
+  ],
+  "forksOf": [
+    {
+      "repo": "self",
+      "sort": "newest",
+      "maxPages": 3
+    },
+    {
+      "repo": "pixeltris/TwitchAdSolutions",
+      "paths": ["vaft"],
+      "sort": "stargazers",
+      "maxPages": 1
+    }
+  ]
+}

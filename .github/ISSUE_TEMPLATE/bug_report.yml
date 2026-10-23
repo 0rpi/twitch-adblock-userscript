@@ -1,0 +1,117 @@
+name: Bug report
+description: Ads shown, black screen, freeze, quality drop or any other problem with the userscript.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Twitch changes often, so the details below are what make a fix possible.
+        🇫🇷 Tu peux écrire en français.
+  - type: input
+    id: version
+    attributes:
+      label: Script version
+      description: "`@version` shown by your script manager (or `vaftStatus().version` in the console). FR : version du script."
+      placeholder: "38.0.0"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      description: "FR : navigateur et version."
+      placeholder: "Firefox 140.0 / Chrome 141.0.7390.54 / Edge ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: manager
+    attributes:
+      label: Script manager
+      description: "FR : gestionnaire de userscripts."
+      options:
+        - Violentmonkey
+        - Tampermonkey
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: manager-version
+    attributes:
+      label: Script manager version
+      placeholder: "2.31.0"
+    validations:
+      required: true
+  - type: textarea
+    id: other-blockers
+    attributes:
+      label: Other adblockers / other vaft copies
+      description: "uBlock Origin (with or without the `vaft-ublock-origin.js` scriptlet), AdGuard, TwitchNoSub, another vaft userscript... Two vaft copies conflict. FR : autres bloqueurs ou autres copies de vaft installés."
+      placeholder: "uBlock Origin 1.66 (default lists, no vaft scriptlet)"
+    validations:
+      required: true
+  - type: input
+    id: channel
+    attributes:
+      label: Channel
+      description: "Channel name (or URL) where it happens. FR : chaîne concernée."
+      placeholder: "https://www.twitch.tv/somechannel"
+    validations:
+      required: true
+  - type: dropdown
+    id: content
+    attributes:
+      label: Live or VOD
+      options:
+        - Live
+        - VOD
+        - Clip
+        - Embedded player (player.twitch.tv)
+    validations:
+      required: true
+  - type: dropdown
+    id: symptom
+    attributes:
+      label: What happened
+      description: "FR : ce qui s'est passé."
+      multiple: true
+      options:
+        - Ads shown
+        - Black screen
+        - Freeze / endless buffering
+        - Quality drop (360p / not Source)
+        - Player error (#2000, #3000, #4000...)
+        - UI (vaft pill in the channel header / settings panel) missing or broken
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: "What you did, what you expected, what you saw. Does it happen on every ad / every channel? Ad fallback (360p or Source), Auto quality (On or Off), channel allowlisted? FR : détails."
+    validations:
+      required: true
+  - type: textarea
+    id: status
+    attributes:
+      label: Output of vaftStatus()
+      description: "Open the console (F12 → Console) on the Twitch tab, run `vaftStatus()` (ideally during or right after the problem) and paste the result. FR : sortie de `vaftStatus()` dans la console."
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: "Red errors / lines mentioning vaft in the console. Remove anything personal (tokens, cookies). FR : erreurs de la console."
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I use the latest version from this repo (script manager → check for updates).
+          required: true
+        - label: Only one vaft copy is active (no other vaft userscript or uBO vaft scriptlet).
+          required: true

@@ -1,0 +1,34 @@
+#EXTM3U
+# Synthetic test fixture for check.js, modelled on the public format of Twitch HLS playlists.
+# Twitch is not reachable from the environment this was written in, so it was NOT captured from
+# a real stream: hosts, IDs, tokens and IPs are made up (example/documentation ranges only).
+# Live media playlist (one rendition) without ads.
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:6
+#EXT-X-MEDIA-SEQUENCE:4410
+#EXT-X-TWITCH-LIVE-SEQUENCE:4416
+#EXT-X-TWITCH-ELAPSED-SECS:8820.000
+#EXT-X-TWITCH-TOTAL-SECS:8843.652
+#EXT-X-DATERANGE:ID="playlist-creation-1792758380",CLASS="timestamp",START-DATE="2026-10-23T12:26:20.420Z",END-ON-NEXT=YES,X-SERVER-TIME="1792758380.42"
+#EXT-X-DATERANGE:ID="playlist-session-1792758380",CLASS="twitch-session",START-DATE="2026-10-23T12:26:20.420Z",END-ON-NEXT=YES,X-TV-TWITCH-SESSIONID="7102938475610293847"
+#EXT-X-DATERANGE:ID="source-1792749537",CLASS="twitch-stream-source",START-DATE="2026-10-23T09:58:57.000Z",END-ON-NEXT=YES,X-TV-TWITCH-STREAM-SOURCE="live"
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:06.420Z
+#EXTINF:2.000,live
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/JQsTCJGxpmEePpZtG5DTnuyBP1dQwSYgtyeruhNUDdAC2B3v2rLkDsyLouEROJIe_J5M1lPpSv4Zg70o3PK61Uk6pZnzFCoKa5T2cSVFNx.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:08.420Z
+#EXTINF:2.000,live
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/fKOzQdxxVl0akR8Kc_YddAmQFu6plqqqKCdAZPgjcnsOoAscn0aW7IlShnbHDtN5JidXahXu3CpbOfl8HOwVpU9KngbkJW0hDnG2weB7fR.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:10.420Z
+#EXTINF:2.000,live
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/_01kABJ613xN4WTQLymsmB8uYrRJ2Sx9tzDZKH2ghrs9njXoQ14U8ZuktfXqfoMkN1OCv1X-MIRpn0FYGe2CYc9K1eB-4aCtFT672I1Mjh.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:12.420Z
+#EXTINF:2.000,live
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/213pzcGyYWPv6smKnJQIKijBtkm5UMO0LaW-3xx5i8cplJjuzezfdkCfVtJ0lbDXPSqzAb9mTMnw6EuJfp7oIE0z5ZtIqJ0ip19NV1avk-.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:14.420Z
+#EXTINF:2.000,live
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/cagcBqtprSTe0uLy9Run0u-rFwwOavwumAIRtryuNlM2oLOXC6tkMfC_doPQeZgKXTxp_0qjIux3EqCCLtClrcPbr0fuEvSFwKjaxiA0vf.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:16.420Z
+#EXTINF:2.000,live
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/hSbq-lUOOFPvWnhPUfsJin7F2UTzet5XAqBsaHUBs88xvPL7RqlhRkMDw3Em6Z0_kZfsC7X_ogY1RfFUODE-V8b4MUTbvLyTk_hEfFdx3I.ts
+#EXT-X-TWITCH-PREFETCH:https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/HiCEWwJZ57IoZ97ukoEjK8py-axr-GX0Lx2ZkxVgVv8mnnan7N8otqYcwZEK0IK90N22i87zrVr4ASZ461r7MAqmj7Nfv1w0B4ujT03bDL.ts
+#EXT-X-TWITCH-PREFETCH:https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/Ll3TRYiOd_e6N9KmZaTGpXrxz-BaKpBO34LiBHvKrX4DtqQ4bpbLQA2tobpRgrNq8fJbRgslmObQQmljULpam83IkMVugfDcNduItORCPa.ts

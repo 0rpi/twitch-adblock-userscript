@@ -1,0 +1,23 @@
+{
+  "name": "twitch-adblock-userscript",
+  "private": true,
+  "description": "Dev tooling for twitch-adblock.user.js (lint, unit check, browser smoke test). Not published.",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "test": "node check.js",
+    "test:tooling": "node tests/fork-watch.test.mjs",
+    "lint": "eslint .",
+    "smoke": "node tests/smoke.mjs",
+    "smoke:live": "node tests/smoke.mjs --live"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.12.0",
+    "globals": "17.13.0",
+    "playwright": "1.56.1"
+  }
+}

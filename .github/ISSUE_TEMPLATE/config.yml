@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Install / README (EN + FR)
+    url: https://github.com/0rpi/twitch-adblock-userscript#readme
+    about: "Install steps, how the toggles work, known limits. FR : installation et limites."

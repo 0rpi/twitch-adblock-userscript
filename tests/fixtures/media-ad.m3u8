@@ -1,0 +1,37 @@
+#EXTM3U
+# Synthetic test fixture for check.js, modelled on the public format of Twitch HLS playlists.
+# Twitch is not reachable from the environment this was written in, so it was NOT captured from
+# a real stream: hosts, IDs, tokens and IPs are made up (example/documentation ranges only).
+# Live media playlist while Twitch stitches a midroll ad into it (server-side ad insertion).
+# Ad segments carry an "Amazon|<creative id>" title (the last one has an empty title), live ones ",live".
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:6
+#EXT-X-MEDIA-SEQUENCE:4412
+#EXT-X-TWITCH-LIVE-SEQUENCE:4418
+#EXT-X-TWITCH-ELAPSED-SECS:8824.000
+#EXT-X-TWITCH-TOTAL-SECS:8847.652
+#EXT-X-DATERANGE:ID="playlist-creation-1792758380",CLASS="timestamp",START-DATE="2026-10-23T12:26:20.420Z",END-ON-NEXT=YES,X-SERVER-TIME="1792758380.42"
+#EXT-X-DATERANGE:ID="playlist-session-1792758380",CLASS="twitch-session",START-DATE="2026-10-23T12:26:20.420Z",END-ON-NEXT=YES,X-TV-TWITCH-SESSIONID="7102938475610293847"
+#EXT-X-DATERANGE:ID="source-1792749537",CLASS="twitch-stream-source",START-DATE="2026-10-23T09:58:57.000Z",END-ON-NEXT=YES,X-TV-TWITCH-STREAM-SOURCE="live"
+#EXT-X-DATERANGE:ID="stitched-ad-1792758376-30",CLASS="twitch-stitched-ad",START-DATE="2026-10-23T12:26:14.420Z",DURATION=30.030,X-TV-TWITCH-AD-ROLL-TYPE="MIDROLL",X-TV-TWITCH-AD-LOADING-TIMEOUT="5",X-TV-TWITCH-AD-POD-LENGTH="1",X-TV-TWITCH-AD-POD-POSITION="0",X-TV-TWITCH-AD-POD-FILLED-DURATION="30.03",X-TV-TWITCH-AD-RADS-TOKEN="fay1al6Lc4ZczDI_s8hnv2qx09OxSIJLYt_QGEdmLto",X-TV-TWITCH-AD-LINE-ITEM-ID="603954778",X-TV-TWITCH-AD-CREATIVE-ID="5198374420",X-TV-TWITCH-AD-ADVERTISER-ID="1029384",X-TV-TWITCH-AD-ORDER-ID="883720011",X-TV-TWITCH-AD-COMMERCIAL-ID="",X-TV-TWITCH-AD-URL="https://www.example.com/landing?utm_source=twitch&utm_medium=midroll",X-TV-TWITCH-AD-CLICK-TRACKING-URL="https://ads.example.net/click?c=5198374420&rt=MIDROLL&pos=0,1"
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:10.420Z
+#EXTINF:2.000,live
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/_01kABJ613xN4WTQLymsmB8uYrRJ2Sx9tzDZKH2ghrs9njXoQ14U8ZuktfXqfoMkN1OCv1X-MIRpn0FYGe2CYc9K1eB-4aCtFT672I1Mjh.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:12.420Z
+#EXTINF:2.000,live
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/213pzcGyYWPv6smKnJQIKijBtkm5UMO0LaW-3xx5i8cplJjuzezfdkCfVtJ0lbDXPSqzAb9mTMnw6EuJfp7oIE0z5ZtIqJ0ip19NV1avk-.ts
+#EXT-X-DISCONTINUITY
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:14.420Z
+#EXTINF:2.002,Amazon|5198374420
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/9dovDs-Vu4d_M_eBEwCRcWSxeVQEPoqWUvOebLBXryUBulJvcJ6Jh6egA7NBduTVaAGBTAJiru6Cefp0IwU0swJLjSG7gXw_oLN7Zt2yN9.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:16.422Z
+#EXTINF:2.002,Amazon|5198374420
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/Bt8OK4yGCtCLizkzDApXHwz6QomrkYZJyK3-Dl6V8bMbxNdSmdZ0zjOwsveBAKjdL5D7YTvtWwY2gOZtMxk89INq-6nFs25cedv7kqfHtG.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:18.424Z
+#EXTINF:2.002,Amazon|5198374420
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/ctInG8de5bV7Nx-cfyjcoaEXZPiyp-Z0PFmVESthhKEkmqAZa7skSNQGWigb_qvOSXGPc8asl9Cq5hnn6ngphMEMweeiNAXw0ZunQVpxSz.ts
+#EXT-X-PROGRAM-DATE-TIME:2026-10-23T12:26:20.426Z
+#EXTINF:2.002,
+https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/hdOjfsfBpi2oFY3Hqjkp3nEixavgf9drNN-DxnDBOX0Waj8FVGCKOKX_6MYc8MtZpKQ6AVj2DFeSEWQwTUiJogAjaft_L-zl8Y5iYJ0R61.ts
+#EXT-X-TWITCH-PREFETCH:https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/JVoqw_aqer9a8SsS0JSbV7XDUoJHBoxdgAGxlU3lXGo1pubXmDVCNCHjYU7C6arJy0elKcm6L7CjIWnp7cMuss6mOrNUAWg2asK1nx1n6q.ts
+#EXT-X-TWITCH-PREFETCH:https://video-edge-c2a6f4.fra05.abs.hls.ttvnw.net/v1/segment/KjEuGhShzI1UA0QFrNaJ7_QyRufzjGbWNMHImfJw2kc1_4cmjkNG708kmmr4aiXoC-OmABHMaDLtsn_GnDJKbYcSHjs0KLyp_3f4mk7ziW.ts

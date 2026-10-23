@@ -1,0 +1,27 @@
+#EXTM3U
+# Synthetic test fixture for check.js, modelled on the public format of Twitch HLS playlists.
+# Twitch is not reachable from the environment this was written in, so it was NOT captured from
+# a real stream: hosts, IDs, tokens and IPs are made up (example/documentation ranges only).
+# Usher master ("encodings") playlist of a live channel with the usual H.264 ladder.
+#EXT-X-TWITCH-INFO:NODE="video-edge-c2a6f4.fra05",MANIFEST-NODE-TYPE="weaver_cluster",MANIFEST-NODE="video-weaver.fra05",SUPPRESS="true",SERVER-TIME="1792758380.42",TRANSCODESTACK="2023-Transcode-QS-V1",USER-IP="203.0.113.7",SERVING-ID="qzutup40zgdazztagrlqttjtxiberrm6",CLUSTER="fra05",ABS="true",VIDEO-SESSION-ID="7102938475610293847",BROADCAST-ID="318273645091",STREAM-TIME="8843.652",B="false",USER-COUNTRY="FR",MANIFEST-CLUSTER="fra05",ORIGIN="fra02",C="aHR0cHM6Ly92aWRlby1lZGdlLWMyYTZmNC5mcmEwNS5hYnMuaGxzLnR0dm53Lm5ldA==",D="false"
+#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="chunked",NAME="1080p60 (source)",AUTOSELECT=YES,DEFAULT=YES
+#EXT-X-STREAM-INF:BANDWIDTH=8534030,RESOLUTION=1920x1080,CODECS="avc1.64002A,mp4a.40.2",VIDEO="chunked",FRAME-RATE=60.000
+https://video-weaver.fra05.hls.ttvnw.net/v1/playlist/o0XtL9DWTmeQDH6uYblzhCi7LzhjcW4X-cf9H07s4UMX3q6o4_Fspaihko7y44_I0RvDW80YIBg1_aem7vZ8kwxuyZIT5mgIpbEhJi-HBy.m3u8
+#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="720p60",NAME="720p60",AUTOSELECT=YES,DEFAULT=YES
+#EXT-X-STREAM-INF:BANDWIDTH=3422999,RESOLUTION=1280x720,CODECS="avc1.4D401F,mp4a.40.2",VIDEO="720p60",FRAME-RATE=60.000
+https://video-weaver.fra05.hls.ttvnw.net/v1/playlist/XRUFTDxhAW1vivNaCdh65xafhY9oUqqYW7rkcvuGKBYwE8LstTnUfyxGJMbgHiGWUy-zHxJUGJiiTyhnQfR1-A7Fchdq1_qE7q298Y5pKE.m3u8
+#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="720p30",NAME="720p",AUTOSELECT=YES,DEFAULT=YES
+#EXT-X-STREAM-INF:BANDWIDTH=2373000,RESOLUTION=1280x720,CODECS="avc1.4D401F,mp4a.40.2",VIDEO="720p30",FRAME-RATE=30.000
+https://video-weaver.fra05.hls.ttvnw.net/v1/playlist/sqRE3Huj03ENhIwr4W_G0oMIXOhJvQWarsdczSLarMUwOxCjOroN7CcU-P-QgAD5nCBB2zGZnUqvEeCi4ZKECAUxFl805EOaD9BmoqlfYR.m3u8
+#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="480p30",NAME="480p",AUTOSELECT=YES,DEFAULT=YES
+#EXT-X-STREAM-INF:BANDWIDTH=1427999,RESOLUTION=852x480,CODECS="avc1.4D401F,mp4a.40.2",VIDEO="480p30",FRAME-RATE=30.000
+https://video-weaver.fra05.hls.ttvnw.net/v1/playlist/7Q4CxcZ0uR9pecBc0UARrvNMh8UhD9Z51S7mHs-MXzg3Ile2dmEvl3idPLil36W-mx_Ez1TPFdHk5CopWZFiron2qqUAxCyZUHgZodUE_X.m3u8
+#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="360p30",NAME="360p",AUTOSELECT=YES,DEFAULT=YES
+#EXT-X-STREAM-INF:BANDWIDTH=630000,RESOLUTION=640x360,CODECS="avc1.4D401E,mp4a.40.2",VIDEO="360p30",FRAME-RATE=30.000
+https://video-weaver.fra05.hls.ttvnw.net/v1/playlist/aliyufEjK0ouAPKaUQ2KioMTfkuymWLaiGgjWBX1qjgk7mhHwVAiwcz3coxzN4ePO7eX-E6q9HmY2ffYBBsJj01iQBwqWTWTXr2pk7_8Jo.m3u8
+#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="160p30",NAME="160p",AUTOSELECT=YES,DEFAULT=YES
+#EXT-X-STREAM-INF:BANDWIDTH=230000,RESOLUTION=284x160,CODECS="avc1.4D400C,mp4a.40.2",VIDEO="160p30",FRAME-RATE=30.000
+https://video-weaver.fra05.hls.ttvnw.net/v1/playlist/Dy7-pqwBWTxcBFDdgVhhR34gv71ZvGk2dkBz9sCyy4IgFhf7jmFPckOR2pCmnXohf03CmZrZzfd1Ld6Xx0W-Q4dtJiXz4h4tMjxUHOG4Ly.m3u8
+#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="audio_only",NAME="audio_only",AUTOSELECT=NO,DEFAULT=NO
+#EXT-X-STREAM-INF:BANDWIDTH=160000,CODECS="mp4a.40.2",VIDEO="audio_only"
+https://video-weaver.fra05.hls.ttvnw.net/v1/playlist/ncJ5cBovR9KjtalLk_4GUZ_Ap1vL7klEibgtKkysn3QQWmRGPlZI_Fam9CNso8wQQZIeDtaiJqIZEW5pSEddOo5Y9XqMwkKO5ly8Cv0qfD.m3u8

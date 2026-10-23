@@ -1,0 +1,45 @@
+# Weekly look at upstream vaft and its forks (see .github/watched-forks.json):
+# commits touching vaft / userscript files in the last 8 days are listed in a single
+# open issue labeled "upstream-watch" (created or updated, new commits as a comment).
+# Read-only on other repos; 404 / archived / empty repos and rate limits are reported
+# in the issue instead of failing the run. Logic: .github/scripts/fork-watch.js
+name: fork-watch
+on:
+  schedule:
+    - cron: '43 5 * * 1' # Mondays 05:43 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Only print the report (job summary), do not touch issues
+        type: boolean
+        default: false
+      window_days:
+        description: Look-back window in days (empty = watched-forks.json, 8)
+        required: false
+        default: ''
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: fork-watch
+  cancel-in-progress: false
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/github-script@v7
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          WINDOW_DAYS: ${{ inputs.window_days }}
+        with:
+          script: |
+            const forkWatch = require('./.github/scripts/fork-watch.js');
+            await forkWatch({
+              github,
+              context,
+              core,
+              dryRun: process.env.DRY_RUN === 'true',
+              windowDays: process.env.WINDOW_DAYS,
+            });

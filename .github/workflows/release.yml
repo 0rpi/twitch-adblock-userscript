@@ -1,0 +1,78 @@
+# Tag push vX.Y.Z -> checks -> GitHub Release with the CHANGELOG section and the userscript.
+# The tag must equal @version in twitch-adblock.user.js and CHANGELOG.md must have a
+# "## [X.Y.Z]" section. Users keep auto-updating from @updateURL (raw main); the
+# release is the changelog + a pinned copy of the file.
+name: release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+permissions:
+  contents: write
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Tag must match @version
+        id: version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(sed -n 's#^// @version[[:space:]]*\([^[:space:]]*\).*#\1#p' twitch-adblock.user.js | head -n 1)"
+          if [ -z "$version" ]; then
+            echo "::error file=twitch-adblock.user.js::@version header not found"
+            exit 1
+          fi
+          if [ "$tag" != "$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match @version $version"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - run: node check.js
+      - run: npm ci
+      - run: npm run lint
+      - name: Extract CHANGELOG section
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # Lines after "## [X.Y.Z]" up to the next "## [" heading or link references.
+          awk -v v="$VERSION" '
+            index($0, "## [" v "]") == 1 { on = 1; next }
+            on && (/^## \[/ || /^\[[^]]+\]: /) { exit }
+            on { print }
+          ' CHANGELOG.md > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error file=CHANGELOG.md::no '## [$VERSION]' section (or it is empty)"
+            exit 1
+          fi
+          if ! grep -Eq "^## \[${VERSION//./\\.}\] - [0-9]{4}-[0-9]{2}-[0-9]{2}" CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::set the release date: '## [$VERSION] - YYYY-MM-DD'"
+            exit 1
+          fi
+          if grep -q 'TODO' release-notes.md; then
+            echo "::error file=CHANGELOG.md::the $VERSION section still contains TODO placeholders"
+            exit 1
+          fi
+          cat release-notes.md
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          flags=()
+          case "$VERSION" in *-*) flags+=(--prerelease) ;; esac
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release edit "$GITHUB_REF_NAME" --title "v$VERSION" --notes-file release-notes.md "${flags[@]}"
+            gh release upload "$GITHUB_REF_NAME" twitch-adblock.user.js --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" twitch-adblock.user.js \
+              --verify-tag --title "v$VERSION" --notes-file release-notes.md "${flags[@]}"
+          fi

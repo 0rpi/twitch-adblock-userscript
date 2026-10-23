@@ -1,0 +1,54 @@
+# Live smoke test against the real twitch.tv (Playwright + Chromium on a GitHub runner).
+#
+# Signal, not a gate: Twitch changes its site, player and directory layout often, and
+# may serve runners a different page (consent, mature gate, A/B tests). So:
+#   - it never runs on push/PR and is not a required check;
+#   - the job is continue-on-error: a failure leaves the run green but the job red,
+#     with ::error:: annotations, a step summary table and a screenshot artifact.
+# A red job means "go look" (share-button selector, worker hook, vaftStatus), not
+# "the release is broken". Local equivalent: SMOKE_LIVE=1 npm run smoke.
+name: smoke-live
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: Channel login to open (empty = first live channel in /directory/all)
+        required: false
+        default: ''
+      wait_ms:
+        description: How long to watch the stream before checking (ms, max 600000)
+        required: false
+        default: '20000'
+  schedule:
+    - cron: '17 6 * * 1' # Mondays 06:17 UTC
+permissions:
+  contents: read
+concurrency:
+  group: smoke-live
+  cancel-in-progress: true
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Live smoke test
+        run: npm run smoke:live
+        env:
+          SMOKE_LIVE: '1'
+          SMOKE_LIVE_CHANNEL: ${{ inputs.channel }}
+          SMOKE_LIVE_WAIT_MS: ${{ inputs.wait_ms || '20000' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-live
+          path: tests/artifacts/
+          if-no-files-found: ignore
+          retention-days: 14

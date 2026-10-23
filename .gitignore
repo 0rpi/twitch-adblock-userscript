@@ -1,0 +1,5 @@
+node_modules/
+# Playwright smoke test output
+test-results/
+playwright-report/
+tests/artifacts/
